@@ -27,20 +27,20 @@ class AnnDataIterWriter():
                 # TODO: change indextype based on nobs, nvars.
                 initial_chunk.indptr = initial_chunk.indptr.astype(np.int64)
                 initial_chunk.indices = initial_chunk.indices.astype(np.int64)
-                ad._io.h5ad.write_csr(f, "X", initial_chunk)
+                ad._io.h5ad.write(f, "X", initial_chunk)
             else:
                 if dtype is None:
                     dtype = initial_chunk.dtype
                 initial_chunk = np.atleast_2d(initial_chunk)
-                ad._io.h5ad.write_array(
+                ad._io.write_elem(
                     f, "X", initial_chunk,
                     dataset_kwargs={
                         'maxshape': (None, initial_chunk.shape[1]),
                         'dtype': dtype
                     }
                 )
-            ad._io.h5ad.write_dataframe(f, "obs", obs)
-            ad._io.h5ad.write_dataframe(f, "var", var)
+            ad._io.write_elem(f, "obs", obs)
+            ad._io.write_elem(f, "var", var)
 
 
     def add_chunk(self, chunk):
